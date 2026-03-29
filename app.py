@@ -45,11 +45,26 @@ def get_ai_response(user_input):
         "stream": False
     }
 
+    
+
     try:
-        res = requests.post(url, json=payload)
-        return res.json()["response"]
+        url = "http://localhost:11434/api/generate"
+
+        payload = {
+            "model": "tinyllama",
+            "prompt": user_input,
+            "stream": False
+        }
+
+        response = requests.post(url, json=payload, timeout=2)
+
+        if response.status_code == 200:
+            return response.json()["response"]
+
     except:
-        return "⚠️ Ollama is not running."
+        # Fallback for cloud
+        return "🤖 This is a demo AI response (Ollama works only locally)."
+
 
 # -----------------------------------
 # Fetch Stock Price
