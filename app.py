@@ -36,36 +36,31 @@ def get_ai_response(user_input):
 
     Keep answers clear and short.
     """
-
     prompt = system_prompt + "\nUser: " + user_input
 
+    # ONLY ONE payload
     payload = {
-        "model": "phi3",
+        "model": "tinyllama",
         "prompt": prompt,
         "stream": False
     }
 
-    
-
     try:
-        url = "http://localhost:11434/api/generate"
-
-        payload = {
-            "model": "tinyllama",
-            "prompt": user_input,
-            "stream": False
-        }
-
-        response = requests.post(url, json=payload, timeout=2)
+        response = requests.post(url, json=payload, timeout=3)
 
         if response.status_code == 200:
-            return response.json()["response"]
+            return response.json().get("response", "⚠️ No response from model")
+        else:
+            return "⚠️ Ollama server error"
 
     except:
-        # Fallback for cloud
-        return "🤖 This is a demo AI response (Ollama works only locally)."
+        return "🤖 Demo response: AI works locally with Ollama."
 
+    
+    
 
+    
+    
 # -----------------------------------
 # Fetch Stock Price
 # -----------------------------------
