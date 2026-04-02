@@ -27,18 +27,11 @@ def get_ai_response(user_input):
 
     system_prompt = """
     You are a beginner-friendly stock market assistant.
-
-    Explain:
-    - Stock concepts simply
-    - Market trends (green/red)
-    - News impact
-    - Give easy examples
-
-    Keep answers clear and short.
+    Explain clearly and simply.
     """
+
     prompt = system_prompt + "\nUser: " + user_input
 
-    # ONLY ONE payload
     payload = {
         "model": "tinyllama",
         "prompt": prompt,
@@ -46,21 +39,27 @@ def get_ai_response(user_input):
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=3)
+        response = requests.post(url, json=payload, timeout=60)
+
+        # 🔥 DEBUG PRINT (important)
+        print("Status:", response.status_code)
+        print("Raw:", response.text)
 
         if response.status_code == 200:
-            return response.json().get("response", "⚠️ No response from model")
+            data = response.json()
+
+            # 🔥 FIX: correct key handling
+            if "response" in data:
+                return data["response"]
+
+            else:
+                return "⚠️ Model responded but no text found"
+
         else:
-            return "⚠️ Ollama server error"
+            return f"⚠️ Server error: {response.status_code}"
 
-    except:
-        return "🤖 Demo response: AI works locally with Ollama."
-
-    
-    
-
-    
-    
+    except Exception as e:
+        return f"⚠️ Connection error: {str(e)}"
 # -----------------------------------
 # Fetch Stock Price
 # -----------------------------------
