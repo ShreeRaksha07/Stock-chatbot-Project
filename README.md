@@ -34,7 +34,7 @@ This is a beginner-friendly AI chatbot built using Python that helps users under
 ---
 
 ## 📸 Screenshots
-![Screenshot](Stock image.png)
+![Screenshot](C:\Users\Ramesh\OneDrive\Pictures\Screenshots Stock image.png)
 
 ---
 
